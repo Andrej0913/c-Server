@@ -4,17 +4,22 @@
 #include <stdlib.h>
 #include <sys/types.h>
 #include <string.h>
+#include <arpa/inet.h>
 #define PORT 8080
 
 int main(int argc, char const* argv[]) {
   // SOCK_STREAM -> TCP
-  int sockD = socket(AF_INET, SOCK_STREAM, 0);
+  // local socked
+  //int sockD = socket(AF_INET, SOCK_STREAM, 0);
+  // net socked
+  int sockD = socket( PF_INET, SOCK_STREAM, IPPROTO_TCP );
 
   struct sockaddr_in servAddr;
 
   servAddr.sin_family = AF_INET; // IPv4
   servAddr.sin_port = htons(9001); // use some unused port number
   servAddr.sin_addr.s_addr = INADDR_ANY;
+  //servAddr.sin_addr.s_addr = inet_addr("xxx.xxx.xxx.x");
 
   printf("Use Port %d\n", servAddr.sin_addr.s_addr);
 

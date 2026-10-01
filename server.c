@@ -16,7 +16,10 @@ int main(int argc, char const* argv[]) {
 
   // create server socket similar to what was doen in
   // client program
-  int servSockD = socket(AF_INET, SOCK_STREAM, 0);
+  // local socked
+  //int servSockD = socket(AF_INET, SOCK_STREAM, 0);
+  // net socked
+  int servSockD = socket( PF_INET, SOCK_STREAM, IPPROTO_TCP );
 
   // string store data to send to client
   char serMsg[255] = "Message from the server to the "
