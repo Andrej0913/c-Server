@@ -4,13 +4,9 @@
 #include <sys/socket.h> // for socked APIs
 #include <sys/types.h>
 #include <string.h>
+#include <pthread.h>
+#include "massage_helper.h"
 #define PORT 8080
-
-static const char* ENDOFCOM = ":q";
-
-void end_com(int clientSocket) {
-  send(clientSocket, ENDOFCOM, sizeof(ENDOFCOM), 0);
-}
 
 int main(int argc, char const* argv[]) {
 
@@ -48,22 +44,27 @@ int main(int argc, char const* argv[]) {
   char* msg = malloc(sizeof(char) * 10);
   char* end = ":q";
 
+  pthread_t thread_1;
+  pthread_create(&thread_1, NULL, recv_massage, (void*)clientSocket);
+  pthread_t thread_2;
+  //pthread_create(&thread_2, NULL, send_massage, (void*)clientSocket);
+
+  // send's messages to client client socket
   for(;;) {
     printf("Type a message\n");
 
     msg[0] = '\0';
     scanf("%s", msg);
 
-    if(!strncmp(msg, end, strlen(end))) {
+    if(!strncmp(msg, ENDOFCOM, strlen(ENDOFCOM))) {
       printf("End\n");
       end_com(clientSocket);
       break;
     }
 
-    // send's messages to client client socket
     send(clientSocket, msg, sizeof(msg), 0);
-
   }
+  //=========
 
   return 0;
 }
