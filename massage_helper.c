@@ -15,12 +15,12 @@ void* recv_massage(void* arg) {
   int sockD = (intptr_t)arg;
   char strData[255];
   char* end = ":q";
-  int ret;
+  int ret = 1;
   for(;;) {
     ret = recv(sockD, strData, sizeof(strData),0);
-    if(ret < 0) perror("error while trying to recieve message");
     printf("Message: %s\n", strData);
-    if(!strncmp(strData, ENDOFCOM, strlen(ENDOFCOM))) {
+    if(ret < 0) perror("error while trying to recieve message");
+    if(!strncmp(strData, ENDOFCOM, strlen(ENDOFCOM)) || ret <= 0) {
       break;
     }
   }
@@ -30,13 +30,13 @@ void* recv_massage(void* arg) {
 void* send_massage(void* arg) {
   int sockD = (intptr_t)arg;
   char* msg = malloc(sizeof(char) * 255);
-  int ret;
+  int ret = 1;
   for(;;) {
     printf("Type a message\n");
     msg[0] = '\0';
     scanf("%s", msg);
 
-    if(!strncmp(msg, ENDOFCOM, strlen(ENDOFCOM))) {
+    if(!strncmp(msg, ENDOFCOM, strlen(ENDOFCOM)) || ret <= 0) {
       printf("End\n");
       end_com(sockD);
       break;

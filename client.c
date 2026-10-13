@@ -9,7 +9,7 @@
 #include <stdint.h>
 #include "massage_helper.h"
 
-#define PORT 8080
+#define PORT 9001
 
 
 int main(int argc, char const* argv[]) {
@@ -22,7 +22,7 @@ int main(int argc, char const* argv[]) {
   struct sockaddr_in servAddr;
 
   servAddr.sin_family = AF_INET; // IPv4
-  servAddr.sin_port = htons(9001); // use some unused port number
+  servAddr.sin_port = htons(PORT); // use some unused port number
   servAddr.sin_addr.s_addr = INADDR_ANY;
   //servAddr.sin_addr.s_addr = inet_addr("x.x.x.x");
 
@@ -40,18 +40,6 @@ int main(int argc, char const* argv[]) {
   }else{
     pthread_create(&thread_1, NULL, send_massage, (void*)(intptr_t)sockD);
     pthread_create(&thread_2, NULL, recv_massage, (void*)(intptr_t)sockD);
-    /*
-    char strData[255];
-    char* end = ":q";
-    for(;;) {
-      recv(sockD, strData, sizeof(strData),0);
-
-      printf("Message: %s\n", strData);
-      if(!strncmp(strData, end, strlen(end))) {
-        break;
-      }
-    }
-    */
 
   }
   pthread_join(thread_1,NULL);
