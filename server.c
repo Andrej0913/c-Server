@@ -5,6 +5,7 @@
 #include <sys/types.h>
 #include <string.h>
 #include <pthread.h>
+#include <stdint.h>
 #include "massage_helper.h"
 #define PORT 8080
 
@@ -45,11 +46,12 @@ int main(int argc, char const* argv[]) {
   char* end = ":q";
 
   pthread_t thread_1;
-  pthread_create(&thread_1, NULL, recv_massage, (void*)clientSocket);
   pthread_t thread_2;
-  //pthread_create(&thread_2, NULL, send_massage, (void*)clientSocket);
+  pthread_create(&thread_1, NULL, recv_massage, (void*)(intptr_t)clientSocket);
+  pthread_create(&thread_2, NULL, send_massage, (void*)(intptr_t)clientSocket);
 
   // send's messages to client client socket
+  /*
   for(;;) {
     printf("Type a message\n");
 
@@ -65,6 +67,8 @@ int main(int argc, char const* argv[]) {
     send(clientSocket, msg, sizeof(msg), 0);
   }
   //=========
-
+  */
+  pthread_join(thread_1,NULL);
+  pthread_join(thread_2,NULL);
   return 0;
 }

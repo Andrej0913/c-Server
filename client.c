@@ -6,6 +6,7 @@
 #include <string.h>
 #include <arpa/inet.h>
 #include <pthread.h>
+#include <stdint.h>
 #include "massage_helper.h"
 
 #define PORT 8080
@@ -37,8 +38,8 @@ int main(int argc, char const* argv[]) {
   if (connectStatus == -1) {
     printf("Error...\n");
   }else{
-    pthread_create(&thread_1, NULL, send_massage, (void*)sockD);
-    pthread_create(&thread_2, NULL, recv_massage, (void*)sockD);
+    pthread_create(&thread_1, NULL, send_massage, (void*)(intptr_t)sockD);
+    pthread_create(&thread_2, NULL, recv_massage, (void*)(intptr_t)sockD);
     /*
     char strData[255];
     char* end = ":q";
@@ -54,5 +55,6 @@ int main(int argc, char const* argv[]) {
 
   }
   pthread_join(thread_1,NULL);
+  pthread_join(thread_2,NULL);
   return 0;
 }
