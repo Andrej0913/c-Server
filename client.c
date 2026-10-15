@@ -8,6 +8,7 @@
 #include <pthread.h>
 #include <stdint.h>
 #include "massage_helper.h"
+#include "socket_helper.h"
 
 #define PORT 9001
 
@@ -17,8 +18,9 @@ int main(int argc, char const* argv[]) {
   // local socked
   //int sockD = socket(AF_INET, SOCK_STREAM, 0);
   // net socked
-  int sockD = socket( PF_INET, SOCK_STREAM, IPPROTO_TCP );
-
+  //int sockD = socket( PF_INET, SOCK_STREAM, IPPROTO_TCP );
+  int sockD = cr_client_socket();
+  /*
   struct sockaddr_in servAddr;
 
   servAddr.sin_family = AF_INET; // IPv4
@@ -31,12 +33,15 @@ int main(int argc, char const* argv[]) {
   int connectStatus
     = connect(sockD, (struct sockaddr*)&servAddr,
               sizeof(servAddr));
+
+  */
+  int connect_status = connect_to_server(sockD,PORT,NULL);
   printf("main SockD: %i\n", sockD);
   pthread_t thread_1;
   pthread_t thread_2;
-
-  if (connectStatus == -1) {
+  if (connect_status <= -1) {
     printf("Error...\n");
+    printf("connectin status: %i\n", connect_status);
   }else{
     pthread_create(&thread_1, NULL, send_massage, (void*)(intptr_t)sockD);
     pthread_create(&thread_2, NULL, recv_massage, (void*)(intptr_t)sockD);
