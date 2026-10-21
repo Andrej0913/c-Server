@@ -3,6 +3,7 @@
 #include <sys/socket.h>
 #include <sys/types.h>
 #include <error.h>
+#include <errno.h>
 #include <stddef.h>
 #include <arpa/inet.h>
 #include <stdio.h>

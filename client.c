@@ -1,12 +1,19 @@
 #include <netinet/in.h> //structure for storing address information
 #include <sys/socket.h> //for socket APIs
+#include <arpa/inet.h>
+#include <sys/types.h>
+#include <stdint.h>
+
 #include <stdio.h>
 #include <stdlib.h>
-#include <sys/types.h>
 #include <string.h>
-#include <arpa/inet.h>
 #include <pthread.h>
-#include <stdint.h>
+
+#include <errno.h>
+#include <error.h>
+
+
+
 #include "massage_helper.h"
 #include "socket_helper.h"
 
@@ -42,6 +49,10 @@ int main(int argc, char const* argv[]) {
   if (connect_status <= -1) {
     printf("Error...\n");
     printf("connectin status: %i\n", connect_status);
+    if (connect_status == -1) {
+      perror("Connection fail\n");
+      printf(": %i\n", errno);
+    }
   }else{
     pthread_create(&thread_1, NULL, send_massage, (void*)(intptr_t)sockD);
     pthread_create(&thread_2, NULL, recv_massage, (void*)(intptr_t)sockD);
